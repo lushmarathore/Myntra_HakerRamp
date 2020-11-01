@@ -1,0 +1,138 @@
+{% extends 'welcome.html' %} {% load static %}
+{% block content %}
+{% load static%}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}"  />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/jquery-ui.css' %}"  />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+    <script src="{% static '/js/jquery-3.3.1.slim.min.js' %}" ></script>
+    <script src="{% static '/js/bootstrap.min.js' %}" ></script>
+    <!--script src="{% static '/js/bootstrap.min4.js' %}" ></script-->
+    <script src="{% static '/js/jquery-ui.js' %}"></script>
+    <script src="{% static '/js/jquery-1.12.4.js' %}"></script>
+    <script src="{% static '/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static '/js/sweetalert.min.js' %}"></script>
+    <script src="{% static '/js/jquery.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min1.js' %}"></script>
+    <script src="{% static '/js/jquery.min1.js' %}"></script>
+    <script src="{% static '/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static '/js/jspdf.min.js' %}"></script>
+
+    <script src="{% static '/DataTables/datatables.min.js' %}"></script>
+    <script src="{% static '/js/dataTables.bootstrap4.min.js' %}"></script>
+   
+</head>
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+<style>
+div.ff{
+    border: 1px solid black;
+}
+</style>
+<form method="POST">
+    {%csrf_token%}
+    <div id="wrapper">
+    {% include 'design1\sidebar-admin.html' %}
+
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+      
+      <div class="row">
+        <div class="container-fluid">
+            <form method="POST">
+                {% csrf_token %}
+                    <h2>Search by username</h2>
+                <br>
+                <br>
+                
+                <center>
+                    <div>
+                        <label><b>Username </b></label>
+                        <input type="text" id='usernamee' name="usernamee" class="form-control" style="width:250px" maxlength="40" >
+                        <input type="button" id='uwse' value='Search' class="form-control btn btn-primary" style="width:150px" onclick="getall()">
+                    
+                    </div> 
+                    <br>
+                    <label id='aa'><b></b></label>
+                    <br><br>
+                    <table id='details' width=70% cellspacing=10% cellpadding=10% border='1px'>
+                    </table>
+                    <br>
+                <br>
+                <table id='bookings' width=80% cellpadding=10% border='1px'>
+                </table>
+                <br>
+                <table id='bookings2' width=80% cellpadding=10% border='1px'>
+                </table>
+
+                </center>
+            </form>
+
+        </div>
+      </div>
+    </div>
+</div>
+    </div>
+</form>
+<script>
+   
+    function getall()
+    {
+       // event.preventDefault();
+        var book_date=document.getElementById('usernamee').value;
+        var data={book_date}
+        $.ajax({
+            type : 'GET',
+            url : "{% url 'admin_byusername' %}",
+            dataType : 'json',
+            data : data,
+            success : function(response)
+            {
+                if(response.length>0)
+                {
+                    //alert("yes");
+                    var a=response[0]['table_data'];
+                    var a2=response[0]['table_data2'];
+                    $('#aa').empty();
+                    $('#aa').append('<b>'+response[0]['type']+'</b>');
+                    
+                    $('#bookings').empty();
+                    $('#bookings2').empty();
+                    $('#details').empty();
+                    var f2='<tr><td> Name </td> <td> '+response[0]['name']+'</td><td>  Address  </td> <td> '+response[0]['address']+' </td></tr><tr> <td> Email </td> <td>'+response[0]['email']+'</td><td> Phone </td> <td>'+response[0]['phone']+'</td></tr>'
+                    $('#details').append(f2);
+                    
+                    if(a.length>0)
+                    {
+                        var f='<tr><td>Sno</td><td>Item No</td><td>Item Name</td><td>From Date</td><td>To Date</td></tr>'
+                        for(var c in a)
+                        {
+                            f=f+'<tr><td>'+String(Number(c)+1)+'</td><td>'+a[c]['item_id']+'</td><td>'+a[c]['name']+'</td><td>'+a[c]['from_date']+'</td><td>'+a[c]['to_date']+'</td></tr>'
+                        }
+                        $('#bookings').append(f);
+                    }
+                    if(response[0]['type']=='Supplier')
+                    {
+                        if(a2.length>0)
+                        {
+                            var f='<tr><td>Sno</td><td>Item No</td><td>Item Name</td><td>Description</td><td>Rate</td></tr>'
+                            for(var c in a2)
+                            {
+                                f=f+'<tr><td>'+String(Number(c)+1)+'</td><td>'+a2[c]['item_id']+'</td><td>'+a2[c]['name']+'</td><td>'+a2[c]['description']+'</td><td>'+a2[c]['rate']+'</td></tr>'
+                            }
+                            $('#bookings2').append(f);
+                        }
+                    }
+                }
+                else
+                {
+                    $('#aa').empty();
+                    $('#aa').append('<b>'+'No User found'+'</b>');
+                    
+                }
+            }
+        })
+
+    }
+
+</script>
+{% endblock content %}

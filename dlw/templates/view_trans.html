@@ -1,0 +1,115 @@
+{% extends 'welcome.html' %} {% load static %}
+{% block content %}
+{% load static%}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}"  />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/jquery-ui.css' %}"  />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+    <script src="{% static '/js/jquery-3.3.1.slim.min.js' %}" ></script>
+    <script src="{% static '/js/bootstrap.min.js' %}" ></script>
+    <!--script src="{% static '/js/bootstrap.min4.js' %}" ></script-->
+    <script src="{% static '/js/jquery-ui.js' %}"></script>
+    <script src="{% static '/js/jquery-1.12.4.js' %}"></script>
+    <script src="{% static '/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static '/js/sweetalert.min.js' %}"></script>
+    <script src="{% static '/js/jquery.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min1.js' %}"></script>
+    <script src="{% static '/js/jquery.min1.js' %}"></script>
+    <script src="{% static '/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static '/js/jspdf.min.js' %}"></script>
+
+    <script src="{% static '/DataTables/datatables.min.js' %}"></script>
+    <script src="{% static '/js/dataTables.bootstrap4.min.js' %}"></script>
+   
+</head>
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+<style>
+div.ff{
+    border: 1px solid black;
+}
+</style>
+<form method="POST">
+    {%csrf_token%}
+    <div id="wrapper">
+    {% include 'design1\sidebar-admin.html' %}
+
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+      
+      <div class="row">
+        <div class="container-fluid">
+            <form method="POST">
+                {% csrf_token %}
+                    <h2>Search by Transaction Date</h2>
+                <br><br>
+                <center>
+                    <div>
+                        <label><b>Booking Date</b></label>
+                        <input type="text" id='book_date' name="book_date" autocomplete="off" class="form-control" style="width:250px" maxlength="10"  onchange="getall()">
+                    </div> 
+                    <br><br>
+                <table id='bookings' width=80% cellpadding=10% border='1px'>
+                    <tr>
+                        <td>SNo</td>
+                        <td>Booked by</td>
+                        <td>Supplier</td>
+                        <td>Item id</td>
+                       
+                    </tr>
+                   
+                </table>
+
+                </center>
+            </form>
+
+        </div>
+      </div>
+    </div>
+</div>
+    </div>
+</form>
+<script>
+    $('#book_date').datepicker({
+        dateFormat: 'dd-mm-yy',
+     });
+    function getall()
+    {
+        var book_date=document.getElementById('book_date').value;
+        var data={book_date}
+        $.ajax({
+            type : 'GET',
+            url : "{% url 'admin_bydate' %}",
+            dataType : 'json',
+            data : data,
+            success : function(response)
+            {
+                if(response.length>0)
+                {
+                   // alert(response.length);
+                  $('#bookings').empty();
+                  var f=' <tr><td>SNo</td><td>Booked by</td><td>Supplier</td><td>Item id</td></tr>'
+                  for(var c in response)
+                  {
+                        f=f+'<tr>'+'<td>'+(Number(c)+1)+'</td>'
+                        //f=f+'<td>'+response[c]['from_date']+'</td>'+'<td>'+response[c]['to_date']+'</td>'
+                        f=f+'<td>'+response[c]['cust_id']+'</td>'+'<td>'+response[c]['supp_id']+'</td>'
+                        f=f+'<td>'+response[c]['item_id']+'</td>'
+                        f=f+'</tr>'
+                        
+                  }
+                  //alert(f);
+                  $('#bookings').append(f);
+                 
+                  
+                }
+                else
+                {
+                   
+                }
+            }
+        })
+
+    }
+
+</script>
+{% endblock content %}

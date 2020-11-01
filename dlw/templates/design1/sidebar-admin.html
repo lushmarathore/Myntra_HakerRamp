@@ -1,0 +1,13 @@
+{% load static%}
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+<div id="sidebar-wrapper" class="bg-dark">
+    <ul class="sidebar-nav font-weight-bold" style="font-size: 20px;">
+      <li><a href="{% url 'items' %}">All Items</a></li>
+      <li><a href="/info">General Information</a></li>
+      <li><a href='/view_cust'>Search by username</a></li>
+      <li><a href='/view_transactions'>Search transactions by Date</a></li>
+      {% if user %}
+      <li><a href="{% url 'history_cust' user %}"> My Account</a></li>
+      {% endif %}
+    </ul>
+  </div>

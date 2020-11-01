@@ -1,0 +1,48 @@
+{% extends 'design1\maindash-shed.html' %} {% load static %}
+{% block content %}
+{% load static%}
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+<form method="POST">
+    {%csrf_token%}
+    <div id="wrapper">
+    {% include 'design1\sidebar-shed.html' %}
+    <div id="page-content-wrapper">
+   
+    
+    
+
+    <form method='POST'>
+      {% csrf_token %}
+      
+          <div class='row'>
+              <div class='col'>
+              <img src='/media/def.jpg' height='700px' width='1800px'  > 
+              
+              </div>
+            </div>
+
+  
+  
+  </form>
+
+<style>
+  #dateupload,#date1{
+    background-color: white;
+  }
+  .btnlink {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+</style>
+  <script>
+    
+  </script>
+
+  {% endblock content %}

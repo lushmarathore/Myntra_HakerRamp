@@ -1,0 +1,168 @@
+<!--Supervisor and tech remarks-->
+{%extends 'base.html'%}
+{%block content%}
+<style>
+    table tr:first-child td {
+        border-top: 0;
+      }
+      table tr:last-child td {
+        border-bottom:0;
+      }
+    
+</style>
+<br>
+<div class="text-center">
+    <h3><b>REMARKS</b></h3>
+</div>
+    <br><br>
+    
+
+<div class="container">
+    <form method="POST" action="">{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-9 container mb-3 mt-3  table-responsive">
+            <table class="table table-striped table-bordered" id="mydatatable">
+                <div><label><b>Complaint no.:</b></label> <label id="compno"><b>{% for c in co %}{{c.compno}}{% endfor %}</b></label></div>
+             
+                <input type="hidden" id="attdon" value="{% for k in co%} {{k.attdon}} {%endfor %} ">
+                <input type="hidden" id="elecompno" name="elecompno" value="{% for c in co %}{{c.compno}}{% endfor %}">
+               
+                <thead>
+                   
+                    <tr>
+            
+                        <th  style="width: 50%;">Remarks</th>
+                        <th  style="width: 50%;">Date</th>
+                        
+                    </tr>
+                    
+                </thead>
+                <tbody id='tbody'>
+                    {% for i in r %}
+                    <tr>
+                       <td data-id="{{i.id}}" data-type="remarks">{{i.remarks}}</td>
+                       <td data-id="{{i.id}}" data-type="remdate">{{i.remdate}}</td>
+                                        
+                   </tr>
+                   {% endfor %}
+                    
+                </tbody>
+            </table>
+  
+        
+      <!--</div>
+        
+                    <button type="submit" name="submit" value="submit" class="button button1">Submit</button>
+                    
+       </div>-->
+       <br><br>
+       <div class="text-left">
+       <a href="/trackcompl/" class="btn btn-success" >Back</a>
+      
+       </div>
+     </div>
+
+   
+       
+    </div>
+        </form>   
+</div>
+ 
+    
+    <script>
+        function validtext(inputField) {
+
+            var i = /[^\s]/.test(inputField.value);
+            if (!i) {
+                alert('input is blank');
+        
+                document.getElementById(inputField.id).value = "";
+                document.getElementById(inputField.id).focus();
+            }
+        }
+        
+        $("#mydatatable").DataTable({
+            destroy:true,
+            lengthMenu:[[5,10,25,50,-1], [5,10,25,50,"All"]],
+            pagingType:"full_numbers",
+            autoWidth:true,  
+            paging:true,
+            order: [[ 1, "desc" ]],  
+        });
+
+        $(".frdBtn").click(function () {
+            
+            if($(this).hasClass('selected')){
+                $(this).removeClass('selected');
+                if(confirm('Are you sure want to close the complaint.'))
+                {}
+            }
+            else{
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                // alert("selected else")
+            }
+            
+        });
+     
+        function fn(){
+            
+            //var m= document.getElementById("attdon").value;
+          
+                
+                var x = confirm("Are you sure you want to close the complaint");
+                if(x)
+                { return true;
+            
+                }
+                 else{
+                return false;
+                  }
+                
+            }
+           
+
+        
+       function myfun(){
+
+            var x= document.getElementById("rem").value;
+            if(x =='')
+            {   alert("remark is empty")
+                return false;}
+
+            else
+            {var cno=$('#elecompno').val();
+            var remark= $("#rem").val()
+    
+            $('#mydatatable tbody').empty();
+            $.ajax({
+              type:'GET',
+              url: "{% url 'civsubmit_rem' %}",
+              dataType: 'json',
+              data: {cno,remark},
+              success: function(response)
+              {
+                //("#mydatatable").DataTable.destroy();
+                $('#mydatatable tbody').empty();
+             
+                var trHTML = '';
+                $.each(response, function (i, item) {
+                    trHTML += '<tr><td>' + item.remarks+ '</td><td>' + item.remdate + '</td></tr>';
+                });
+                trHTML+='</tbody>'
+                $('#mydatatable').append(trHTML);
+                table=$('#mydatatable').DataTable();
+                document.getElementById('rem').value='';
+            }
+            
+            });  
+        return true;
+        }
+            
+       }
+     
+    
+
+         
+    </script>
+{%endblock%}

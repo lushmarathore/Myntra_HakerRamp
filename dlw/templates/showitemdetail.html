@@ -1,0 +1,84 @@
+{% extends 'welcome.html' %} {% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+
+<form method='POST'>
+{% csrf_token %}
+<br><br><br><br>
+{% if data %}
+      <h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{data.0.name}} </b></h3>
+    {% endif %}
+<div id="page-content-wrapper">
+    <div id="wrapper">
+    
+    <div class="container-fluid">
+    
+    <form method='POST'>
+    {% csrf_token %}
+        <input type="hidden" id='userid' name='userid' value="{{user}}">
+        <div class='row'>
+            <div class='col'>
+            <img src='/media/{{data.0.pic}}' height='400px' width='600px' alt="{{data.0.description}}">
+            </div>
+            <H3>
+            <div class='col' height='400px' width="400px">
+                    
+                        <b>{{data.0.name}}</b>
+                    <br><br>
+
+                    
+                    
+                    {{data.0.description}}
+                    <br>
+                    
+                    {{data.0.rate}}
+                    
+                    <br>
+                    <div class='row'>
+                        <div class='col'>
+                        {{data.0.size}}
+                        </div>
+                        <div class='col'>
+                        {{data.0.color}}
+                        </div>
+                        
+                    </div>
+                <div class='col'>
+                    
+                    {% if type == 'Admin' %}
+                    &nbsp;
+                    {% elif type == 'Customer' %}
+                        {% if idd %}
+                        <br><br><br>
+                        <input type="hidden" id='idd' value='{{idd}}'> 
+                            {% if user == 'None' or user == "" %}
+                            <label><h5><a href='/' class='nav-link'> Please Login First to book an item </a></h5> </label>
+                            {% else %}
+                            <input type="submit" id='IDD' name='submit' value='Book Now' class="form-control"  style="width:150px" >
+                            
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                </div>
+            
+            </H3>
+            <div class='col'>
+            </div>
+            
+        </div>
+    </form>
+    </div>
+    </div>
+</div>
+</form>
+<script>
+    function book()
+{
+    alert("BOOK");
+    window.location.href = "{% url 'booking' idd %}"+"";
+       
+}
+
+</script>
+{% endblock content %}

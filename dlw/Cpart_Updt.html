@@ -1,0 +1,104 @@
+{% extends 'base.html' %} 
+{% block content %}
+<script src= "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">  </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<head>
+<style>
+  
+</style>
+</head>
+<form>
+<h4 align="center">SCREEN FOR CHANGE NOTICE PART NO UPDATION</h4>
+<br><br>
+<div>
+<table style="text-align:right;margin-left:380px; width:520px">
+<tr>
+   <td><label style="font-size:18px;">PREPLANNING CHANGE NOTICE NO:</label></td>
+    <td><input type="text" id="Txtcn_no" maxlength="4" onchange="Txtcn_no_TextChanged()"></td>
+</tr>
+<tr>
+ <td><label style="font-size:18px;">REG_NO:</label></td>
+ <td><input type="text" id="Txtreg_no"></td>
+</tr>
+<tr>
+ <td><button type="button" id="Btnproceed"  class="btn btn-success"   onclick="Btnproceed_Click()">Proceed</button></td>
+ <td><button type="button" id="btnClear" name="btnClear" class="btn btn-success" style="padding-left: 52px;padding-right: 60px;" onclick="window.location.reload();">Clear</button></td>
+ </tr>
+</table>
+</div>
+</form>
+<script>
+   function Txtcn_no_TextChanged()
+   {
+      var cn_no = document.getElementById('Txtcn_no').value;
+      var data = {cn_no};
+      $.ajax({
+         type : 'GET',
+         url : "{% url 'pplcn_changed' %}",
+         dataType : 'json',
+         data : data,
+         success : function(response){
+             if(response[0] == 0)
+             {
+                alert("No part for updation");
+                document.getElementById('Txtcn_no').value="";
+                document.getElementById('Txtreg_no').value="";
+                document.getElementById("Txtcn_no").focus();
+             }
+             if(response[0]==1)
+             {
+                alert("Wrong Pre Pplanning Change Notice No");
+                document.getElementById('Txtcn_no').value="";
+                document.getElementById('Txtreg_no').value="";
+                document.getElementById("Txtcn_no").focus();
+             }
+             if((response[0]!=1)&&(response[0]!=0))
+             {
+             document.getElementById('Txtreg_no').value=response[0];
+             }
+         },
+     })
+   }
+   function Btnproceed_Click()
+   {
+      var cn_no = document.getElementById('Txtcn_no').value;
+      var reg_no = document.getElementById('Txtreg_no').value;
+      var data = {cn_no,reg_no};
+      $.ajax({
+         type : 'GET',
+         url : "{% url 'v_proceed' %}",
+         dataType : 'json',
+         data : data,
+         success : function(response){
+             if(response[0]==0)
+             {
+               alert("No part for updation");
+               document.getElementById('Txtcn_no').value="";
+               document.getElementById('Txtreg_no').value="";
+               document.getElementById("Txtcn_no").focus();
+             }
+             else if(response[0]==10)
+             {
+                alert("ERROR");
+             }
+             else if(response.length==2)
+             {
+                alert("PTC Changed in nstr Table in All epc");
+                alert("Done");
+                document.getElementById('Txtcn_no').value="";
+                document.getElementById('Txtreg_no').value="";
+             }
+             else if(response[0]==9)
+             {
+                alert("Done");
+                document.getElementById('Txtcn_no').value="";
+                document.getElementById('Txtreg_no').value="";
+             }
+         },
+     })
+   }
+</script>
+{% endblock content %}

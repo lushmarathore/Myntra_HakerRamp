@@ -1,0 +1,18 @@
+{% load static%}
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+<div id="sidebar-wrapper" class="bg-dark">
+    <ul class="sidebar-nav font-weight-bold" style="font-size: 20px;">
+      <li><a href="{% url 'vendor_warranty' %}">Dashboard</a></li>
+      <li><a href="{% url 'vendor_warranty' 'new_cases' %}">New Cases</a></li>
+      <li><a href="{% url 'vendor_warranty' 'tentative_date' %}">Pending for Visit</a></li>
+      <li><a href="{% url 'vendor_warranty' 'lift_repair' %}">Pending for Lifting/Repairing</a></li>
+      <li><a href="{% url 'vendor_warranty' 'forward_shed' %}">Cases Pending to be forwarded &nbsp;&nbsp;&nbsp;to shed</a></li>
+      <li><a href="{% url 'vendor_warranty' 'pending_at_shed' %}">Cases Pending for verification &nbsp;&nbsp;&nbsp;from shed</a></li>
+      <li><a href="{% url 'vendor_warranty' 'closed_cases' %}">Closed Cases</a></li>
+      
+      <!-- <li ><a href="warranty_lodge" id="doc">Fill VA1 form</a></li>
+      <li ><a href="vendor_report"id="doc1">View VA1 form</a></li>
+      <li><a href="vendor_correction">Corrections in VA1 form</a></li> -->
+      <!-- <li><a href="vchangepass">Change password</a></li> -->
+    </ul>
+  </div>

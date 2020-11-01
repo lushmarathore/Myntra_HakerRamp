@@ -1,0 +1,156 @@
+{% extends 'design1\maindash-shed.html' %} {% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+
+    {% csrf_token %}
+    
+    <style>
+      #dateupload,#date1{
+        background-color: white;
+      }
+        
+        .modal{
+            overflow: auto !important;
+        }
+        
+        
+        
+          table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting {
+          padding-right: 0px !important;
+      }
+    </style>
+    
+<div id="wrapper">
+    {% include 'design1\sidebar-shed.html' %}
+<div id="page-content-wrapper">
+   
+    <h3 align="center"><b>View Stock</b></h3>
+    <br>
+    
+
+    <form method='POST'>
+      {% csrf_token %}
+      {% for i in data %}
+      <br>
+          <div class='row'>
+              <div class='col'>
+              <img src='/media/{{i.pic}}' height='400px' width='400px' alt="{{i.description}}">
+              </div>
+              <H3>
+              <div class='col' height='400px' width="400px">
+                      
+                          <b>{{i.name}}</b>
+                      <br><br>
+  
+                      
+                      
+                      {{i.description}}
+                      <br><br>
+  
+                      <div class='row'>
+                          <div class='col'>
+                          {{i.size}}
+                          </div>
+                          <div class='col'>
+                          {{i.color}}
+                          </div>
+                          <div class='col'>
+                            {{i.item_id}}
+                            </div>
+              </div>
+              <br><br>
+              <div class='row'>
+                <div class='col'>
+                  {{i.rate}}
+                  </div>
+                  <div class='col'>
+                    Edit Price
+                    <input type="text" class="form-control" value="" name="change" id="{{i.item_id}}"  />
+                    
+                    <div class='col'>
+                    <input type="submit" class="form-control" value="Change Price" name="submit" onclick="update(this.id)" id="{{i.name}}*{{i.description}}*{{i.item_id}}" />
+                  </div>
+                  <div class='col'>
+                    <input type="submit" class="form-control" value="Delete Stock" name="submit" onclick="delete_dress(this.id)" id="{{i.description}}*{{i.item_id}}" />
+                  
+                   </div>
+                  </div>
+                  
+              </div>
+              </H3>
+              <div class='col'>
+              </div>
+          </div>
+          {% endfor%}
+      </form>
+      </div>
+      </div>
+  </div>
+  </form>
+
+
+</div>
+</div>
+
+
+
+<script>
+  function delete_dress(idd)
+    {
+      var ele1=idd;
+      var arr=ele1.split('*')
+      var description=arr[0];
+      var item_id=arr[1];
+      data={item_id}
+      $.ajax({
+            type : 'GET',
+            url : "{% url 'delete_dress1' %}",
+            dataType : 'json',
+            data : data,
+            success : function(response)
+            {
+                alert("Deleted Successfully");
+
+            }
+        })
+
+      24
+    }
+
+  function update(idd)
+    {
+      //alert("hii");
+      var ele=idd;
+      //alert("ele"+ele);
+      var arr=ele.split('*')
+      var name=arr[0];
+      var description=arr[1];
+      var item_id=arr[2];
+      
+      
+      var rate=$('#'+item_id).val();
+      var desc=$('#'+description).val();
+      
+      alert("rate"+rate);
+      alert("desc"+desc);
+      data={name,description,item_id,rate}
+      $.ajax({
+            type : 'GET',
+            url : "{% url 'make_update' %}",
+            dataType : 'json',
+            data : data,
+            success : function(response)
+            {
+                alert("Updated Successfully");
+
+            }
+        })
+
+
+    }
+  
+
+
+</script>
+{% endblock content %}

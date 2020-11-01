@@ -1,0 +1,76 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shed Dashboard</title>
+    <script src="{% static '/js/jquery-3.4.1.min.js' %}" ></script>
+    <script src="{% static '/js/popper.min.js' %}" ></script>
+    <script src="{% static '/js/Chart.min.js' %}"></script>
+    <script src="{% static '/js/jquery-3.3.1.slim.min.js' %}" ></script>
+    <script src="{% static '/js/bootstrap.min.js' %}" ></script>
+    <script src="{% static '/js/jquery-ui.js' %}"></script>
+    <script src="{% static '/js/jquery-1.12.4.js' %}"></script>
+    <script src="{% static '/js/select2.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/select2.min.css' %}"  />
+    <script src="{% static '/js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static '/js/sweetalert.min.js' %}"></script>
+    <script src="{% static '/js/jquery.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min1.js' %}"></script>
+    <script src="{% static '/js/jquery.min1.js' %}"></script>
+    <script src="{% static '/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static '/js/jspdf.min.js' %}"></script>
+    <script src="{% static '/DataTables/datatables.min.js' %}"></script>
+    <script src="{% static '/js/dataTables.bootstrap4.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/DataTables/datatables.min.css' %}"  />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}"  />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/jquery-ui.css' %}"  />
+    <script src="https://kit.fontawesome.com/88111875c2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+    <style>
+        .form-container
+    {
+        background:#fff;
+        padding: 30px;
+        margin-top:30px;
+        margin-right: 100px;
+        margin-left: 100px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px #000;
+    }
+    body {
+      width: 100% !important;
+      padding-right: 0 !important;
+      overflow-y: scroll !important;
+      }
+    </style>
+</head>
+<body>
+  
+        {% include 'design1\topnav-shed.html' %} 
+    {% block content %} {% endblock content %}
+  
+    
+  <input type="hidden" id="id" value={{id}}>
+  <script>
+    $("#menu-toggle").click(function(e){
+      e.preventDefault();
+      $("#wrapper").toggleClass("menudisplayed");
+    });
+      console.log(document.getElementById('id').value);
+      if(document.getElementById('id').value!='')
+      {
+        document.getElementById('doc').style.display='none';
+        document.getElementById('doc1').style.display=" ";
+      }
+      else
+      {
+        document.getElementById('doc1').style.display='none';
+        document.getElementById('doc').style.display=" ";
+      }
+      
+  </script>
+  </form>
+</body>
+</html>

@@ -1,0 +1,208 @@
+{% extends 'design1\maindash-shed.html' %} {% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/side-bar.css' %}"  />
+
+    {% csrf_token %}
+    
+    <style>
+      #dateupload,#date1{
+        background-color: white;
+      }
+        
+        .modal{
+            overflow: auto !important;
+        }
+        
+        
+        /*the container must be positioned relative:*/
+        .autocomplete {
+            position: relative;
+            display: inline-block;
+          }
+          
+          
+          
+         
+          
+          .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+          }
+          
+          .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff; 
+            border-bottom: 1px solid #d4d4d4; 
+          }
+          
+          /*when hovering an item:*/
+          .autocomplete-items div:hover {
+            background-color: #e9e9e9; 
+          }
+          
+          /*when navigating through the items using the arrow keys:*/
+          .autocomplete-active {
+            background-color: DodgerBlue !important; 
+            color: #ffffff; 
+          }
+          
+          table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting {
+          padding-right: 0px !important;
+      }
+    </style>
+    
+<div id="wrapper">
+    {% include 'design1\sidebar-shed.html' %}
+<div id="page-content-wrapper">
+   
+    <h3 align="center"><b>Upload a new product</b></h3>
+    <br>
+    <center>
+    <div class="col-md-4 text-center"> 
+         
+       {% if messages %}       
+       {% for message in messages %}
+       {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS%}
+            <div class="alert alert-success" id="msg" role="alert">
+                <strong>Successfully done! </strong>
+            </div> 
+        {%endif%}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO%}
+        <div class="alert alert-primary" id="msg" role="alert">{{ message }}</div>
+        {%endif%}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR%}
+        <div class="alert alert-danger" id="msg" role="alert">{{ message }}</div>
+        {%endif%}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING%}
+        <div class="alert alert-warning" id="msg" role="alert">{{ message }}</div>
+        {%endif%}
+        {% endfor %}
+        {% endif %}
+    </div>
+    </center>
+    <form method="POST" autocomplete="off" enctype="multipart/form-data"> {% csrf_token %}
+      
+        <center>
+        <table style="width: 100%;" cellpadding="7px">
+			
+			<tr>
+            
+                <td colspan="4"><b>Item ID</b><input type="text"  class="form-control" style="width: 333px;" id="item" name="item" required="" maxlength="8" onchange="isAlphanum(id);func(id)" autocomplete="off"></td>
+                
+                <td colspan="5"><b>Description</b><input type="text" id="desc" class="form-control" style="width: 333px;"  name="desc" required="" maxlength="15"  class="form-control"  ></td>
+				<td colspan="6"><b>Quantity</b><input type="text" id="quan" class="form-control" style="width: 333px; "  name="quan"  maxlength="20" class="date"  required="" ></td>
+            </tr>
+            <tr>
+            
+                <td colspan="4"><b>Rate</b><input type="text"  class="form-control" style="width: 333px;" id="rate" name="rate" required="" maxlength="8" onchange="isAlphanum(id);func(id)" autocomplete="off"></td>
+                
+                <td colspan="5"><b>Color</b><input type="text" id="color" class="form-control" style="width: 333px;"  name="color" required="" maxlength="15"  class="form"  ></td>
+				<td colspan="6"><b>Size</b><input type="text" id="size" class="form-control" style="width: 333px; "  name="size"  maxlength="20" class="date"  required="" ></td>
+            </tr>
+            <tr>
+            
+                <td colspan="4"><b>Picture</b><input type="file" id="clist" name="clist"  class="form-control" style="width: 250px;" onchange="checkfile(this.id)" required>
+            </tr>
+                <tr>
+                    <td colspan="4"> <input type="submit"  class="btn btn-primary" value="Submit" name="submit" id="myproceed" > </td>
+            </tr>
+        
+        </table>
+    </center>
+      <!-- <hr>
+      <center><b>No Record Present </b></center>
+      <hr>
+       -->
+    </form>
+</div>
+</div>
+
+
+
+<script>
+  function checkfile(idd)
+{
+   var ext = $('#clist').val().split('.').pop().toLowerCase();
+   //alert(ext);
+   if ('jpg' == ext)
+   {
+      return
+   }
+   else
+   {
+      alert("Wrong format.. Only jpg supported!!");
+     document.getElementById("clist").value="";
+   }
+}
+
+
+function validatesave(i)
+{
+  if(i==4)
+  {
+    var filee=document.getElementById('f1').value;
+    var datee=document.getElementById('dateupload').value;
+    if(filee=='')
+    {
+      alert("No file added..");
+      document.getElementById('f1').focus();
+      return;
+    }
+    else if(datee=='')
+         {
+          alert("Please Select Date..");
+          document.getElementById('dateupload').focus();
+          return;
+         }
+    else
+    {
+      document.querySelector('#submit4').click();
+    }
+    
+  }
+}
+function fileCheck(ele)
+{
+  var ext = $('#f1').val().split('.').pop().toLowerCase();
+   //alert(ext);
+   if ('pdf' == ext)
+   {
+    const fi = document.getElementById('f1'); 
+    // Check if pdf any file is selected. 
+    if (fi.files.length > 0) { 
+        for (const i = 0; i <= fi.files.length - 1; i++)
+         { 
+
+            const fsize = fi.files.item(i).size; 
+            const file = Math.round((fsize / 1024)); 
+            // The size of the file. 
+            if (file >= 4096) { 
+                alert( 
+                  "File too Big, please select a file less than 4mb"); 
+            } 
+            else
+            {
+              return
+            }
+        } 
+    } 
+      
+   }
+   else
+   {
+      alert("Wrong format.. Only pdf supported!!");
+     document.getElementById("f1").value="";
+   }
+
+}
+</script>
+{% endblock content %}
