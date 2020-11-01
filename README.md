@@ -6,3 +6,4 @@ Steps to run the file
 3. Activate virtual environment. (./env/scripts/activate)
 4. pip install -r requirements.txt
 5. Run
+6. Import csv files for particular users, if wanted. Otherwise, we can register from web pages provided in module as well.
